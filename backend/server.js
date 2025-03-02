@@ -15,6 +15,7 @@ app.use(cors());
 
 // Routes
 app.use("/api/transactions", require("./routes/transactionRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));  // ✅ Add this line
 
 app.get("/", (req, res) => {
   res.send("Paisa Controller API is running...");
