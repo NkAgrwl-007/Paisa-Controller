@@ -1,5 +1,53 @@
 .transactions {
-    padding: 20px;
-    background-color: white;
-  }
-  
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.transaction-form input,
+.transaction-form select,
+.transaction-form button {
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.transaction-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.transaction-card.income {
+  border-left: 5px solid green;
+}
+
+.transaction-card.expense {
+  border-left: 5px solid red;
+}
+
+.amount {
+  font-weight: bold;
+}
+
+.delete-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
