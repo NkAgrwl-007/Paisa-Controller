@@ -2,7 +2,7 @@ Paisa Controller – AI-Powered Finance Management
 Overview
 Paisa Controller is an AI-driven personal finance management platform designed to help users track expenses, manage budgets, plan savings, and automate financial decisions. It features multi-account tracking, AI insights, debt management, and secure transactions with a payment gateway.
 
-Features <b>
+Features <br>
 Expense Tracking & Budgeting – AI-powered insights for smart financial decisions.
 Multi-Account Management – Sync multiple bank accounts and e-wallets.
 Automated Savings & Debt Tracking – Plan savings and manage repayments.
