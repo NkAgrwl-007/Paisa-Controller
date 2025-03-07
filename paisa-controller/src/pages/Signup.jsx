@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/signup.css";
 
 const Signup = () => {
@@ -10,10 +11,22 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    console.log("User registered:", formData);
-    navigate("/");
+    try {
+      // ✅ Send Signup Data to Backend
+      const res = await axios.post("http://localhost:5000/api/users/signup", formData);
+
+      if (res.status === 201) {
+        // ✅ Save User Data in localStorage
+        localStorage.setItem("user", JSON.stringify(res.data));
+        
+        // ✅ Redirect to Home after Signup
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error("Signup failed:", error.response?.data?.message || error.message);
+    }
   };
 
   return (

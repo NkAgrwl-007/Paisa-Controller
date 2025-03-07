@@ -9,6 +9,7 @@ const Home = () => {
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")) || null);
   const [transactions, setTransactions] = useState([]);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const [editMode, setEditMode] = useState(!user);
   const [formData, setFormData] = useState({
     totalBalance: user?.totalBalance || 0,
@@ -18,15 +19,20 @@ const Home = () => {
 
   useEffect(() => {
     const fetchTransactions = async () => {
+      if (!user) return;
       try {
-        const res = await axios.get("http://localhost:5000/api/transactions");
+        const res = await axios.get(`http://localhost:5000/api/transactions?userId=${user.id}`);
         setTransactions(res.data || []);
       } catch (error) {
         console.error("Error fetching transactions:", error);
       }
     };
     fetchTransactions();
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    document.body.classList.toggle("dark-mode", darkMode);
+  }, [darkMode]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: Number(e.target.value) }));
@@ -41,11 +47,12 @@ const Home = () => {
   };
 
   const toggleSidePanel = () => setIsPanelOpen(!isPanelOpen);
+  const toggleTheme = () => setDarkMode(!darkMode);
 
   const totalIncome = transactions.reduce((acc, tx) => (tx.type === "income" ? acc + tx.amount : acc), 0);
   const totalExpenses = transactions.reduce((acc, tx) => (tx.type === "expense" ? acc + tx.amount : acc), 0);
 
-  const savingsProgress = user?.savingsGoal ? Math.min((user.totalBalance / user.savingsGoal) * 100, 100) : 0;
+  const savingsProgress = user?.savingsGoal ? Math.min((user?.totalBalance / user.savingsGoal) * 100, 100) : 0;
 
   const data = [
     { name: "Income", value: totalIncome },
@@ -59,7 +66,7 @@ const Home = () => {
         {user && <h2 className="welcome">Welcome, {user.name}!</h2>}
         {user && (
           <div className="profile-section" onClick={toggleSidePanel}>
-            <div className="profile-icon">{user.name?.charAt(0).toUpperCase() || "U"}</div>
+            <div className="profile-icon">{user?.name?.charAt(0).toUpperCase() || "U"}</div>
           </div>
         )}
       </header>
@@ -86,19 +93,23 @@ const Home = () => {
           <div className="grid-container">
             <div className="card balance">
               <h3>Current Balance</h3>
-              <p>${user.totalBalance}</p>
+              <p>${user?.totalBalance || 0}</p>
             </div>
 
             <div className="card chart">
               <h3>Expense vs. Income</h3>
-              <PieChart width={200} height={200}>
-                <Pie data={data} cx="50%" cy="50%" innerRadius={50} outerRadius={80} fill="#8884d8" dataKey="value">
-                  {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
+              {totalIncome > 0 || totalExpenses > 0 ? (
+                <PieChart width={200} height={200}>
+                  <Pie data={data} cx="50%" cy="50%" innerRadius={50} outerRadius={80} fill="#8884d8" dataKey="value">
+                    {data.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              ) : (
+                <p>No transaction data available</p>
+              )}
             </div>
 
             <div className="card savings">
@@ -121,7 +132,12 @@ const Home = () => {
       {isPanelOpen && user && (
         <div className="side-panel">
           <button className="close-btn" onClick={toggleSidePanel}>X</button>
-          <h3>{user.name || "User"}</h3>
+          <h3>{user?.name || "User"}</h3>
+          <p>Email: {user.email || "N/A"}</p>
+          <button className="settings-btn">Settings</button>
+          <button className="theme-btn" onClick={toggleTheme}>
+            {darkMode ? "Light Mode 🌞" : "Dark Mode 🌙"}
+          </button>
         </div>
       )}
     </div>

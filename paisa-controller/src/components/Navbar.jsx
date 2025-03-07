@@ -7,7 +7,7 @@ const Navbar = () => {
     <nav className="navbar">
       <h2>Paisa Controller</h2>
       <ul>
-        <li><Link to="/">Home</Link></li>
+        <li><Link to="/home">Home</Link></li>
         <li><Link to="/dashboard">Dashboard</Link></li>
         <li><Link to="/transactions">Transactions</Link></li>
         <li><Link to="/budget">Budget</Link></li>

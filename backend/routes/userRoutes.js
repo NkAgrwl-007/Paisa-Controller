@@ -1,35 +1,65 @@
 const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 const router = express.Router();
 
-// Create a new user
-router.post("/", async (req, res) => {
+// User Signup
+router.post("/signup", async (req, res) => {
   try {
-    const { name, email, totalBalance, monthlyBudget, savingsGoal } = req.body;
+    const { name, email, password } = req.body;
+    const existingUser = await User.findOne({ email });
 
-    if (!name || !email) {
-      return res.status(400).json({ message: "Name and email are required" });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
     }
 
-    const newUser = new User({ name, email, totalBalance, monthlyBudget, savingsGoal });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ name, email, password: hashedPassword });
     await newUser.save();
 
-    res.status(201).json({ message: "User created successfully", user: newUser });
+    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ message: "Error creating user", error: error.message });
+    res.status(500).json({ message: "Signup failed", error: error.message });
   }
 });
 
-// Fetch all users
-router.get("/", async (req, res) => {
+// User Login
+router.post("/login", async (req, res) => {
   try {
-    const users = await User.find();
-    res.status(200).json(users);
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    // Set HTTP-Only Cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 3600000, // 1 hour
+    });
+
+    res.json({
+      message: "Login successful",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
   } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ message: "Error fetching users", error: error.message });
+    res.status(500).json({ message: "Login failed", error: error.message });
   }
 });
 
