@@ -1,44 +1,43 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../styles/login.css";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+    setCredentials((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setMessage("");
+    setLoading(true);
+
     try {
-      console.log("Attempting login with:", credentials);
       const response = await axios.post(
         "http://localhost:5000/api/users/login",
-        credentials,
-        { withCredentials: true }
+        credentials
       );
 
-      console.log("Response from server:", response.data);
-      setMessage(response.data.message);
-
-      if (response.status === 200 && response.data.user) {
-        const { isAdmin, email } = response.data.user;
-        localStorage.setItem("isAdmin", isAdmin);
-        localStorage.setItem("email", email);
-        navigate("/home");
+      if (response.status === 200 && response.data?.user) {
+        // ✅ Save user info in localStorage (no token needed)
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        navigate("/home", { replace: true });
       } else {
-        setMessage("User data not found in the response.");
+        setMessage("Login failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error during login:", error);
-      if (error.response) {
-        console.error("Server Response:", error.response.data);
-      }
-      setMessage(error?.response?.data?.message || "Server is unreachable. Please try again later.");
+      setMessage(
+        error?.response?.data?.message ||
+          "Login failed. Please check your credentials and try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,13 +45,29 @@ const Login = () => {
     <div className="auth-container">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-      <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-      <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-        <button type="submit">Login</button>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={credentials.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={credentials.password}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
-      <p className="error-message">{message}</p>
+      {message && <p className="error-message">{message}</p>}
       <p>
-        Don't have an account? <a href="/signup">Sign Up</a>
+        Don’t have an account? <Link to="/signup">Sign Up</Link>
       </p>
     </div>
   );

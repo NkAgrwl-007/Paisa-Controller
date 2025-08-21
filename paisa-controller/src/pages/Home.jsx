@@ -49,10 +49,18 @@ const Home = () => {
   const toggleSidePanel = () => setIsPanelOpen(!isPanelOpen);
   const toggleTheme = () => setDarkMode(!darkMode);
 
-  const totalIncome = transactions.reduce((acc, tx) => (tx.type === "income" ? acc + tx.amount : acc), 0);
-  const totalExpenses = transactions.reduce((acc, tx) => (tx.type === "expense" ? acc + tx.amount : acc), 0);
+  const totalIncome = transactions.reduce(
+    (acc, tx) => (tx.type === "income" ? acc + tx.amount : acc),
+    0
+  );
+  const totalExpenses = transactions.reduce(
+    (acc, tx) => (tx.type === "expense" ? acc + tx.amount : acc),
+    0
+  );
 
-  const savingsProgress = user?.savingsGoal ? Math.min((user?.totalBalance / user.savingsGoal) * 100, 100) : 0;
+  const savingsProgress = user?.savingsGoal
+    ? Math.min((user?.totalBalance / user.savingsGoal) * 100, 100)
+    : 0;
 
   const data = [
     { name: "Income", value: totalIncome },
@@ -63,10 +71,14 @@ const Home = () => {
     <div className="home">
       <header className="header">
         <h1>Paisa Controller</h1>
-        {user && <h2 className="welcome">Welcome, {user.name}!</h2>}
+        {user && (
+          <h2 className="welcome">Welcome, {user.name || user.username || "User"}!</h2>
+        )}
         {user && (
           <div className="profile-section" onClick={toggleSidePanel}>
-            <div className="profile-icon">{user?.name?.charAt(0).toUpperCase() || "U"}</div>
+            <div className="profile-icon">
+              {(user?.name || user?.username || "U").charAt(0).toUpperCase()}
+            </div>
           </div>
         )}
       </header>
@@ -74,21 +86,46 @@ const Home = () => {
       <p>Track your expenses and manage your budget easily.</p>
 
       {user && user.savingsGoal > 0 && (
-        <p className="motive">Your goal is to save ${user.savingsGoal}. Stay focused and achieve financial freedom!</p>
+        <p className="motive">
+          Your goal is to save ${user.savingsGoal}. Stay focused and achieve financial freedom!
+        </p>
       )}
 
       {editMode ? (
         <form className="user-form" onSubmit={handleSubmit}>
           <h2>{user ? "Edit Your Financial Details" : "Enter Your Financial Details"}</h2>
-          <input type="number" name="totalBalance" value={formData.totalBalance} placeholder="Total Balance" onChange={handleChange} required />
-          <input type="number" name="monthlyBudget" value={formData.monthlyBudget} placeholder="Monthly Budget" onChange={handleChange} required />
-          <input type="number" name="savingsGoal" value={formData.savingsGoal} placeholder="Savings Goal" onChange={handleChange} required />
+          <input
+            type="number"
+            name="totalBalance"
+            value={formData.totalBalance}
+            placeholder="Total Balance"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="monthlyBudget"
+            value={formData.monthlyBudget}
+            placeholder="Monthly Budget"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="savingsGoal"
+            value={formData.savingsGoal}
+            placeholder="Savings Goal"
+            onChange={handleChange}
+            required
+          />
           <button type="submit">{user ? "Update Details" : "Save Details"}</button>
         </form>
       ) : (
         <div className="dashboard">
           <h2>Financial Dashboard</h2>
-          <button className="edit-btn" onClick={() => setEditMode(true)}>Edit</button>
+          <button className="edit-btn" onClick={() => setEditMode(true)}>
+            Edit
+          </button>
 
           <div className="grid-container">
             <div className="card balance">
@@ -99,14 +136,30 @@ const Home = () => {
             <div className="card chart">
               <h3>Expense vs. Income</h3>
               {totalIncome > 0 || totalExpenses > 0 ? (
-                <PieChart width={200} height={200}>
-                  <Pie data={data} cx="50%" cy="50%" innerRadius={50} outerRadius={80} fill="#8884d8" dataKey="value">
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
+                <>
+                  <PieChart width={200} height={200}>
+                    <Pie
+                      data={data}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={50}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {data.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+
+                  {/* ✅ Show values clearly below the chart */}
+                  <div className="chart-labels">
+                    <p style={{ color: COLORS[0] }}>Income: ${totalIncome}</p>
+                    <p style={{ color: COLORS[1] }}>Expenses: ${totalExpenses}</p>
+                  </div>
+                </>
               ) : (
                 <p>No transaction data available</p>
               )}
@@ -115,11 +168,18 @@ const Home = () => {
             <div className="card savings">
               <h3>Savings Progress</h3>
               <div className="progress-bar-container">
-                <div className="progress-bar" style={{ width: `${savingsProgress}%`, backgroundColor: "#00C49F" }}>
+                <div
+                  className="progress-bar"
+                  style={{
+                    width: `${savingsProgress}%`,
+                    backgroundColor: "#00C49F",
+                  }}
+                >
                   {savingsProgress.toFixed(1)}%
                 </div>
               </div>
             </div>
+
             <div className="card insights">
               <h3>AI Insights & Recommendations</h3>
               <p>💡 You spent 20% more on dining this month.</p>
@@ -132,7 +192,7 @@ const Home = () => {
       {isPanelOpen && user && (
         <div className="side-panel">
           <button className="close-btn" onClick={toggleSidePanel}>X</button>
-          <h3>{user?.name || "User"}</h3>
+          <h3>{user?.name || user?.username || "User"}</h3>
           <p>Email: {user.email || "N/A"}</p>
           <button className="settings-btn">Settings</button>
           <button className="theme-btn" onClick={toggleTheme}>
