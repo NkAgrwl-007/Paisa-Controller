@@ -2,20 +2,24 @@ import React from "react";
 import { Routes, Route, Navigate, useLocation, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Home from "./pages/Home";
+
+// ✅ Pages
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
-import Budget from "./pages/Budget";
+import Budgets from "./pages/Budgets";
+import Savings from "./pages/Savings";
 import Reports from "./pages/Reports";
+import AIInsights from "./pages/AIInsight";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+
 import "./styles/global.css";
 
 // ✅ Protected Route Component
 const ProtectedRoute = () => {
-  const isAuthenticated = localStorage.getItem("user"); 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+  const token = localStorage.getItem("token"); // check JWT token
+  return token ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 const App = () => {
@@ -27,20 +31,24 @@ const App = () => {
       {!hideNavAndFooter && <Navbar />}
       <div className="container">
         <Routes>
-          {/* ✅ Default Route is Signup */}
-          <Route path="/" element={<Signup />} />
+          {/* Public routes */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/home" element={<Home />} />
 
-          {/* ✅ Protected Routes */}
+          {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/transactions" element={<Transactions />} />
-            <Route path="/budget" element={<Budget />} />
+            <Route path="/budgets" element={<Budgets />} />
+            <Route path="/savings" element={<Savings />} />
             <Route path="/reports" element={<Reports />} />
+            <Route path="/ai-insights" element={<AIInsights />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
+
+          {/* Catch-all route */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </div>
       {!hideNavAndFooter && <Footer />}

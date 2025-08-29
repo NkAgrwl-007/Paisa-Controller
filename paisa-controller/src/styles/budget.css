@@ -1,79 +1,157 @@
+/* budget.css */
+:root {
+  --bg-color: #0d1117;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --accent: #00e6e6;
+  --accent-glow: 0 0 20px rgba(0, 230, 230, 0.7);
+  --text-color: #e6e6e6;
+  --muted-text: #9ba3af;
+  --radius: 16px;
+  --shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+  --blur: blur(14px);
+  --transition: 0.3s ease;
+}
+
+/* Page wrapper */
 .budget {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  padding: 2rem;
+  color: var(--text-color);
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #0d1117, #000);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .budget h1 {
-  color: #333;
+  text-align: center;
+  color: var(--accent);
+  font-size: 2.2rem;
+  text-shadow: var(--accent-glow);
+  margin-bottom: 0.5rem;
 }
 
 .budget p {
-  color: #666;
+  text-align: center;
+  color: var(--muted-text);
+  margin-bottom: 2rem;
 }
 
+/* Form */
 .budget-form {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 20px 0;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
-.budget-form input,
-.budget-form button {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+.budget-form input {
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--glass-border);
+  background: var(--card-bg);
+  color: var(--text-color);
+  backdrop-filter: var(--blur);
+  outline: none;
+  transition: var(--transition);
+}
+
+.budget-form input:focus {
+  border-color: var(--accent);
+  box-shadow: var(--accent-glow);
 }
 
 .budget-form button {
-  background: #28a745;
-  color: white;
+  padding: 0.7rem 1.2rem;
+  border-radius: var(--radius);
+  border: none;
   cursor: pointer;
+  background: var(--accent);
+  color: #000;
+  font-weight: bold;
+  transition: var(--transition);
 }
 
 .budget-form button:hover {
-  background: #218838;
+  transform: translateY(-3px);
+  box-shadow: var(--accent-glow);
 }
 
+/* Budget List */
 .budget-list {
-  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
-.budget-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+.budget-card {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--blur);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
 }
 
-.progress-bar-container {
-  background: #ddd;
-  border-radius: 10px;
+.budget-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: var(--accent-glow);
+}
+
+.budget-card h3 {
+  color: var(--accent);
+  margin-bottom: 0.7rem;
+  font-size: 1.3rem;
+}
+
+.budget-card p {
+  margin: 0.3rem 0;
+}
+
+/* Progress Bar (Bootstrap override) */
+.progress {
+  height: 18px;
+  border-radius: var(--radius);
   overflow: hidden;
-  height: 10px;
-  margin-top: 10px;
+  margin-top: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .progress-bar {
-  height: 10px;
-  background: #007bff;
-  transition: width 0.3s ease-in-out;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-shadow: 0 0 4px #000;
+  transition: width 0.6s ease;
 }
 
+/* Success (green glow) */
+.progress-bar.bg-success {
+  background: linear-gradient(90deg, #00ff88, #00e6e6);
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+}
+
+/* Danger (red glow) */
+.progress-bar.bg-danger {
+  background: linear-gradient(90deg, #ff4d4d, #ff1a1a);
+  box-shadow: 0 0 12px rgba(255, 68, 68, 0.6);
+}
+
+/* Delete Button */
 .delete-btn {
-  background: red;
-  color: white;
-  border: none;
-  padding: 5px 10px;
+  margin-top: 1rem;
+  background: transparent;
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  border-radius: 5px;
+  transition: var(--transition);
 }
 
 .delete-btn:hover {
-  background: darkred;
+  background: #ff4444;
+  color: #000;
+  box-shadow: 0 0 12px rgba(255, 68, 68, 0.6);
 }

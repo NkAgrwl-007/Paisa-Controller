@@ -1,0 +1,62 @@
+.aiinsight-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f9fafb;
+}
+
+.aiinsight-layout {
+  display: flex;
+  flex: 1;
+}
+
+.aiinsight-main {
+  flex: 1;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  margin: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.aiinsight-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 1rem;
+}
+
+.aiinsight-description {
+  font-size: 1rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+}
+
+.aiinsight-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.aiinsight-card {
+  background: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.aiinsight-card:hover {
+  transform: translateY(-5px);
+}
+
+.aiinsight-card h2 {
+  font-size: 1.2rem;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.aiinsight-card p {
+  font-size: 0.95rem;
+  color: #374151;
+}

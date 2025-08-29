@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "../styles/signup.css";
 
@@ -11,47 +11,56 @@ const Signup = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setError("");
 
-    // ✅ Client-side validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
 
+    setLoading(true);
+
     try {
-      // ✅ Send Signup Data to Backend
-      const res = await axios.post("http://localhost:5000/api/users/signup", {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      });
+      const { data, status } = await axios.post(
+        "http://localhost:5000/api/users/signup",
+        {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        },
+        { withCredentials: true } // ✅ support cookies if backend sets them
+      );
 
-      if (res.status === 201) {
-        // ✅ Ensure backend returns { id, name, email, token }
-        const userData = {
-          id: res.data.id,
-          name: res.data.name,
-          email: res.data.email,
-          token: res.data.token,
-        };
+      if (status === 201 && data?.token) {
+        // ✅ Save token + user in localStorage
+        localStorage.setItem("token", data.token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            id: data.id,
+            name: data.name,
+            email: data.email,
+          })
+        );
 
-        // ✅ Save User Data in localStorage
-        localStorage.setItem("user", JSON.stringify(userData));
-
-        // ✅ Redirect to Home after Signup
-        navigate("/home");
+        // Redirect user to dashboard after signup
+        navigate("/login", { replace: true });
       }
-    } catch (error) {
-      console.error("Signup failed:", error.response?.data?.message || error.message);
-      setError(error.response?.data?.message || "Signup failed. Please try again.");
+    } catch (err) {
+      console.error("Signup failed:", err.response?.data?.message || err.message);
+      setError(err.response?.data?.message || "Signup failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,13 +100,15 @@ const Signup = () => {
           onChange={handleChange}
           required
         />
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Signing up..." : "Sign Up"}
+        </button>
       </form>
 
       {error && <p className="error-message">{error}</p>}
 
       <p>
-        Already have an account? <a href="/login">Login</a>
+        Already have an account? <Link to="/login">Login</Link>
       </p>
     </div>
   );

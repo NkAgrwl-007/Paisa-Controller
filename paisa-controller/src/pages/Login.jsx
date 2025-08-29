@@ -21,13 +21,17 @@ const Login = () => {
     try {
       const response = await axios.post(
         "http://localhost:5000/api/users/login",
-        credentials
+        credentials,
+        { withCredentials: true } // ✅ allows cookies if backend uses them
       );
 
-      if (response.status === 200 && response.data?.user) {
-        // ✅ Save user info in localStorage (no token needed)
+      if (response.status === 200 && response.data?.token) {
+        // ✅ Save token + user info in localStorage
+        localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        navigate("/home", { replace: true });
+
+        // Redirect after successful login
+        navigate("/dashboard", { replace: true });
       } else {
         setMessage("Login failed. Please try again.");
       }

@@ -1,63 +1,112 @@
-.dashboard-container {
-  padding: 20px;
-  background-color: #121212;
+/* dashboard.css */
+:root {
+  --bg-color: #0d1117;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --accent: #00e6e6;
+  --accent-glow: 0 0 20px rgba(0, 230, 230, 0.7);
+  --text-color: #e6e6e6;
+  --muted-text: #9ba3af;
+  --radius: 16px;
+  --shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+  --blur: blur(14px);
+  --transition: 0.3s ease;
+}
+
+/* Whole dashboard */
+.dashboard.futuristic {
   min-height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
+  background: radial-gradient(circle at top, #0d1117, #000);
+  color: var(--text-color);
+  padding: 2rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Neon Effect for Main Heading */
-.dashboard-container h2 {
-  font-size: 30px;
-  color: #00ffea;
-  text-transform: uppercase;
+/* Title & subtitle */
+.dashboard-title {
+  font-size: 2.5rem;
+  color: var(--accent);
+  text-align: center;
+  text-shadow: var(--accent-glow);
+}
+
+.dashboard-subtitle {
+  text-align: center;
+  color: var(--muted-text);
+  margin-bottom: 3rem;
+}
+
+/* Summary Cards */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--blur);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.glass-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent);
+  box-shadow: 0 0 25px rgba(0, 230, 230, 0.6);
+}
+
+.glass-card h3 {
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+.glass-card p {
+  font-size: 1.4rem;
   font-weight: bold;
-  text-shadow: 0 0 5px #00ffea, 0 0 10px #00ffea, 0 0 20px #00e6ff, 0 0 40px #0099ff;
-  animation: glow 1.5s infinite alternate;
-  text-align: center;
-  margin-top: 20px;
 }
 
-@keyframes glow {
-  from {
-      text-shadow: 0 0 5px #00ffea, 0 0 10px #00ffea, 0 0 20px #00e6ff, 0 0 40px #0099ff;
-  }
-  to {
-      text-shadow: 0 0 10px #0099ff, 0 0 20px #00e6ff, 0 0 30px #00ffea, 0 0 50px #00ffea;
-  }
+/* Income, Expense, Savings colors */
+.income p {
+  color: #00ff88;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+}
+.expenses p {
+  color: #ff4444;
+  text-shadow: 0 0 10px rgba(255, 68, 68, 0.6);
+}
+.savings p {
+  color: #ffa500;
+  text-shadow: 0 0 10px rgba(255, 165, 0, 0.6);
 }
 
-/* Stylish Gradient Heading for Entries */
-.dashboard-container h3 {
-  font-size: 22px;
-  font-weight: bold;
-  text-transform: uppercase;
-  background: linear-gradient(90deg, #ff416c, #ff4b2b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
-  text-align: center;
+/* Charts Grid */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
 }
 
-/* Improved Paragraph Styling for Better Visibility */
-.dashboard-container p {
-  font-size: 16px;
-  color: #fff;
-  text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.5);
-  max-width: 100%;
-  text-align: center;
+.chart h3,
+.ai-insights h3 {
+  color: var(--accent);
+  margin-bottom: 1rem;
 }
 
-/* Additional styling for better readability */
-.dashboard-content {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  width: 100%;
+/* AI Insights */
+.ai-insights p {
+  color: var(--text-color);
+  margin: 0.5rem 0;
+}
+
+/* Loading */
+.loading {
   text-align: center;
+  font-size: 1.2rem;
+  color: var(--muted-text);
 }

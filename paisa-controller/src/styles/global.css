@@ -1,4 +1,4 @@
-/* Global Styles */
+/* 🌙 Global Styles */
 body {
   background-color: #0d0d0d;
   color: white;
@@ -12,7 +12,173 @@ body {
   overflow-x: hidden;
 }
 
-/* Ensure Dashboard Covers Full Space */
+/* ================= NAVBAR ================= */
+.navbar {
+  background: rgba(0, 123, 255, 0.9);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 255, 234, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-radius: 0 0 14px 14px;
+  backdrop-filter: blur(10px);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.side-panel-btn {
+  background: linear-gradient(135deg, #00ffea, #007bff);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 12px #00ffea;
+  transition: all 0.3s ease;
+}
+
+.side-panel-btn:hover {
+  background: linear-gradient(135deg, #007bff, #00ffea);
+  transform: scale(1.1);
+  box-shadow: 0 0 18px #00ffea;
+}
+
+.navbar h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px #00ffea;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0;
+}
+
+.navbar ul li {
+  font-size: 16px;
+  transition: transform 0.2s;
+}
+
+.navbar ul li:hover {
+  transform: scale(1.1);
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar a:hover {
+  color: #00ffea;
+  text-shadow: 0 0 10px #00ffea;
+}
+
+/* Navbar right (Greeting + User) */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.greeting {
+  font-size: 15px;
+  font-weight: 500;
+  color: #b3eaff;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  color: #00ffea;
+  padding: 6px 12px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px #00ffea;
+  transition: all 0.3s ease-in-out;
+}
+
+.user-name:hover {
+  background: #00ffea;
+  color: #0d0d0d;
+  box-shadow: 0 0 15px #00ffea;
+}
+
+/* ================= SIDE PANEL ================= */
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 260px;
+  height: 100%;
+  background: rgba(15, 15, 15, 0.95);
+  box-shadow: 4px 0 12px rgba(0, 255, 234, 0.4);
+  padding: 20px;
+  transition: left 0.4s ease-in-out;
+  z-index: 1100;
+  backdrop-filter: blur(10px);
+}
+
+.side-panel.open {
+  left: 0;
+}
+
+.side-panel h3 {
+  color: #00ffea;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.side-panel button {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  background: linear-gradient(135deg, #007bff, #00ffea);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00ffea;
+  transition: all 0.3s ease;
+}
+
+.side-panel button:hover {
+  background: linear-gradient(135deg, #00ffea, #007bff);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ffea;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent !important;
+  color: #ff4b2b;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+/* ================= DASHBOARD ================= */
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -24,7 +190,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Prevent Content Collapse & Ensure Proper Layout */
 .container {
   width: 100%;
   max-width: 1200px;
@@ -35,7 +200,7 @@ body {
   align-items: center;
 }
 
-/* Neon Glow Effect for Headings */
+/* Neon Glow Headings */
 .dashboard-container h2 {
   text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea, 0 0 30px #00ffea;
   transition: text-shadow 0.3s ease-in-out;
@@ -47,7 +212,7 @@ body {
   text-shadow: 0 0 15px #00ffea, 0 0 25px #00ffea, 0 0 35px #00ffea, 0 0 50px #00ffea;
 }
 
-/* User Logo Styling */
+/* User Logo */
 .user-logo {
   background: linear-gradient(135deg, #00ffea, #00b3cc);
   color: black;
@@ -67,7 +232,7 @@ body {
   box-shadow: 0 0 15px #00ffea, 0 0 30px #00b3cc;
 }
 
-/* Dashboard Cards */
+/* Cards */
 .card {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
@@ -86,7 +251,7 @@ body {
   box-shadow: 0 0 15px #00ffea;
 }
 
-/* Card Layout - Proper Spacing */
+/* Grid Layout */
 .grid-container {
   display: flex;
   flex-wrap: wrap;
@@ -96,7 +261,7 @@ body {
   width: 100%;
 }
 
-/* Button Styling */
+/* Buttons */
 button {
   background: linear-gradient(45deg, #00ffea, #007bff);
   color: white;
@@ -116,7 +281,7 @@ button:hover {
   box-shadow: 0 0 15px #00ffea;
 }
 
-/* Quick Actions Floating Button */
+/* Floating Button */
 .floating-btn {
   position: fixed;
   bottom: 20px;
@@ -138,7 +303,7 @@ button:hover {
   background: linear-gradient(45deg, #ff416c, #ff4b2b);
 }
 
-/* Smooth Appearance for Elements */
+/* Smooth Fade */
 .fade-in {
   opacity: 0;
   transform: translateY(10px);

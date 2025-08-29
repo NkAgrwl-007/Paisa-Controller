@@ -1,19 +1,71 @@
 .navbar {
-    background-color: #007bff;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    color: white;
-  }
-  .navbar ul {
-    list-style: none;
-    display: flex;
-  }
-  .navbar ul li {
-    margin: 0 15px;
-  }
-  .navbar a {
-    color: white;
-    text-decoration: none;
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1e1e2f;
+  color: #fff;
+  padding: 12px 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-left .navbar-logo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #00c4b4;
+}
+
+.navbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-search {
+  width: 50%;
+  max-width: 400px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  background: #2c2c40;
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.navbar-search::placeholder {
+  color: #bbb;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.user-icon {
+  width: 36px;
+  height: 36px;
+  background: #00c4b4;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.username {
+  font-size: 1rem;
+  font-weight: 500;
+}
