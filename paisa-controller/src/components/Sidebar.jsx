@@ -1,12 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/sidebar.css";
+import "../styles/sidebar.css"; // you can rename to navbar.css if you prefer
 
 const Sidebar = () => {
   return (
-    <div className="sidebar">
-      <h2 className="sidebar-title">Menu</h2>
-      <ul className="sidebar-links">
+    <nav className="nav-menu">
+      <ul className="nav-links">
         <li>
           <Link to="/dashboard">Dashboard</Link>
         </li>
@@ -20,7 +19,7 @@ const Sidebar = () => {
           <Link to="/report">Reports</Link>
         </li>
       </ul>
-    </div>
+    </nav>
   );
 };
 

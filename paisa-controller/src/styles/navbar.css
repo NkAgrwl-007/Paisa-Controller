@@ -1,71 +1,176 @@
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #1e1e2f;
-  color: #fff;
-  padding: 12px 24px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+:root {
+  --sidebar-width: 220px; /* consistent across all pages */
+  --accent: #00c4b4;
+  --bg-dark: #1e1e2f;
+  --text-light: #e6e6e6;
 }
 
-.navbar-left .navbar-logo {
+/* Sidebar container */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  background: var(--bg-dark);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  overflow-y: auto; /* scroll if needed */
+}
+
+/* Brand */
+.navbar-logo {
   font-size: 1.4rem;
   font-weight: 600;
-  color: #00c4b4;
+  color: var(--accent);
+  margin-bottom: 30px;
+  white-space: nowrap;
 }
 
-.navbar-center {
+/* Links */
+.navbar-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
   flex: 1;
+}
+
+.navbar-links li {
+  width: 100%;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #ccc;
+  padding: 10px 14px;
+  border-radius: 8px;
+  display: block;
+  transition: background 0.3s, color 0.3s;
+}
+
+.navbar-links a:hover,
+.navbar-links a.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* User avatar (bottom) */
+.sidebar-user {
+  margin-top: auto;
+  padding: 12px;
   display: flex;
   justify-content: center;
-}
-
-.navbar-search {
-  width: 50%;
-  max-width: 400px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: none;
-  outline: none;
-  background: #2c2c40;
-  color: #fff;
-  font-size: 0.95rem;
-}
-
-.navbar-search::placeholder {
-  color: #bbb;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.navbar-user {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   cursor: pointer;
 }
 
-.user-icon {
-  width: 36px;
-  height: 36px;
-  background: #00c4b4;
-  color: #fff;
+.user-avatar {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  transition: transform 0.2s;
 }
 
-.username {
-  font-size: 1rem;
+.sidebar-user:hover .user-avatar {
+  transform: scale(1.1);
+}
+
+/* Overlay panel */
+.user-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width); /* slides out next to sidebar */
+  width: 300px;
+  height: 100vh;
+  background: var(--bg-dark);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.4);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.user-panel h3 {
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.user-panel .email {
+  color: #aaa;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+/* Buttons inside user panel */
+.close-btn {
+  align-self: flex-end;
+  background: transparent;
+  border: none;
+  color: #ccc;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.close-btn:hover {
+  color: #fff;
+}
+
+.theme-btn,
+.edit-btn,
+.logout-btn {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.theme-btn {
+  background: #333;
+  color: #fff;
+}
+
+.edit-btn {
+  background: var(--accent);
+  color: #000;
   font-weight: 500;
+}
+
+.logout-btn {
+  background: #ff4444;
+  color: #fff;
+}
+
+.theme-btn:hover {
+  background: #444;
+}
+
+.edit-btn:hover {
+  background: #00a090;
+  color: #fff;
+}
+
+.logout-btn:hover {
+  background: #ff2222;
 }

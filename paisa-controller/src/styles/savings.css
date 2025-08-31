@@ -1,88 +1,54 @@
-.savings-container {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  font-family: Arial, sans-serif;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.savings-container h2 {
-  font-size: 26px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.savings-form {
+.savings-page {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  height: 100vh;
 }
 
-.savings-form label {
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: #444;
+.savings-container {
+  display: flex;
+  flex: 1;
 }
 
-.savings-form input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.3s;
-}
-
-.savings-form input:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-.savings-form button {
-  padding: 12px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.savings-form button:hover {
-  background: #0056b3;
-}
-
-.savings-summary {
-  margin-top: 25px;
+.savings-main {
+  flex: 1;
   padding: 20px;
-  background: white;
-  border-radius: 12px;
-  border: 1px solid #eee;
+  background: #f9fafb;
+  overflow-y: auto;
 }
 
-.savings-summary h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-  color: #222;
+.savings-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
-.savings-summary p {
-  font-size: 16px;
-  margin: 6px 0;
-  color: #555;
+.savings-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-.success-message {
-  margin-top: 15px;
-  padding: 12px;
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-  border-radius: 8px;
-  font-size: 15px;
+.savings-text {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.savings-text.highlight {
+  font-weight: 600;
+  color: #007bff;
+}
+
+.savings-chart {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.savings-percentage {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4cafef;
 }

@@ -1,3 +1,4 @@
+// src/pages/Dashboard.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -24,9 +25,12 @@ const Dashboard = () => {
   // ✅ Fetch transactions
   const fetchTransactions = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/transactions", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "http://localhost:5000/api/transactions",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setTransactions(response.data || []);
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -59,25 +63,28 @@ const Dashboard = () => {
     return acc;
   }, []);
 
-  // ✅ Format numbers
+  // ✅ Currency formatting
   const formatCurrency = (amount) =>
-    new Intl.NumberFormat("en-US", {
+    new Intl.NumberFormat("en-IN", {
       style: "currency",
-      currency: "USD",
+      currency: "INR",
+      maximumFractionDigits: 0,
     }).format(amount);
 
   if (loading) return <p className="loading">🚀 Loading your dashboard...</p>;
 
   return (
     <div className="dashboard futuristic">
-      
-      <h1 className="dashboard-title">🌌 Paisa Controller Dashboard</h1>
-      <p className="dashboard-subtitle">
-        AI-powered insights into your financial universe
-      </p>
+      {/* Page Title */}
+      <header className="dashboard-header">
+        <h1 className="dashboard-title">🌌 Paisa Controller Dashboard</h1>
+        <p className="dashboard-subtitle">
+          AI-powered insights into your financial universe
+        </p>
+      </header>
 
       {/* ✅ Summary Section */}
-      <div className="summary-grid">
+      <section className="summary-grid">
         <div className="glass-card income">
           <h3>Total Income</h3>
           <p>{totalIncome > 0 ? formatCurrency(totalIncome) : "—"}</p>
@@ -90,10 +97,11 @@ const Dashboard = () => {
           <h3>Savings</h3>
           <p>{savings !== 0 ? formatCurrency(savings) : "—"}</p>
         </div>
-      </div>
+      </section>
 
-      {/* ✅ Charts */}
-      <div className="charts-grid">
+      {/* ✅ Charts + AI Insights */}
+      <section className="charts-grid">
+        {/* Category Chart */}
         <div className="glass-card chart">
           <h3>Category-wise Spending</h3>
           {categoryData.length > 0 ? (
@@ -122,14 +130,14 @@ const Dashboard = () => {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <p>No spending data available.</p>
+            <p className="empty-text">No spending data available.</p>
           )}
         </div>
 
-        {/* ✅ AI Insights */}
+        {/* AI Insights */}
         <div className="glass-card ai-insights">
           <h3>🤖 AI Insights</h3>
-          {totalExpenses > 0 ? (
+          {totalIncome > 0 ? (
             <>
               <p>
                 💡 You spent{" "}
@@ -144,10 +152,10 @@ const Dashboard = () => {
               )}
             </>
           ) : (
-            <p>No insights yet. Add some transactions.</p>
+            <p className="empty-text">No insights yet. Add some transactions.</p>
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

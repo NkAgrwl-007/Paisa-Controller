@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Navbar from "../components/Navbar"; // ✅ Use updated Navbar
 import "../styles/transactions.css";
 
 const Transactions = () => {
@@ -11,7 +12,6 @@ const Transactions = () => {
     date: "",
   });
 
-  // ✅ Get user & token from localStorage
   const user = JSON.parse(localStorage.getItem("user")) || null;
   const token = localStorage.getItem("token");
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -22,7 +22,7 @@ const Transactions = () => {
     }
   }, [user]);
 
-  // ✅ Fetch transactions for logged-in user
+  // ✅ Fetch transactions
   const fetchTransactions = async () => {
     try {
       const res = await axios.get(
@@ -56,7 +56,7 @@ const Transactions = () => {
         {
           ...formData,
           amount: Number(formData.amount),
-          userId: user.id || user._id, // 🔑 Link transaction to user
+          userId: user.id || user._id,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -83,65 +83,70 @@ const Transactions = () => {
   };
 
   return (
-    <div className="transactions">
-      <h1>Transactions</h1>
-      <p>Manage your income and expenses.</p>
+    <>
+      {/* ✅ Navbar on top */}
+      <Navbar />
 
-      {/* ✅ Transaction Form */}
-      <form className="transaction-form" onSubmit={handleSubmit}>
-        <select name="type" value={formData.type} onChange={handleChange}>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-        <input
-          type="text"
-          name="category"
-          placeholder="Category"
-          value={formData.category}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="amount"
-          placeholder="Amount"
-          value={formData.amount}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Add Transaction</button>
-      </form>
+      <div className="transactions page-container">
+        <h1 className="page-title">📒 Transactions</h1>
+        <p className="page-subtitle">Manage your income and expenses with ease.</p>
 
-      {/* ✅ Transaction List */}
-      <div className="transaction-list">
-        {transactions.length === 0 ? (
-          <p>No transactions yet.</p>
-        ) : (
-          transactions.map((tx) => (
-            <div key={tx._id} className={`transaction-card ${tx.type}`}>
-              <span>{new Date(tx.date).toLocaleDateString()}</span>
-              <span>{tx.category}</span>
-              <span className="amount">
-                {tx.type === "income" ? "+" : "-"}${tx.amount}
-              </span>
-              <button
-                className="delete-btn"
-                onClick={() => handleDelete(tx._id)}
-              >
-                X
-              </button>
-            </div>
-          ))
-        )}
+        {/* ✅ Transaction Form */}
+        <form className="transaction-form glass-card" onSubmit={handleSubmit}>
+          <select name="type" value={formData.type} onChange={handleChange}>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+          <input
+            type="text"
+            name="category"
+            placeholder="Category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="amount"
+            placeholder="Amount"
+            value={formData.amount}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" className="btn-primary">Add</button>
+        </form>
+
+        {/* ✅ Transaction List */}
+        <div className="transaction-list">
+          {transactions.length === 0 ? (
+            <p className="empty-state">No transactions yet.</p>
+          ) : (
+            transactions.map((tx) => (
+              <div key={tx._id} className={`transaction-card glass-card ${tx.type}`}>
+                <span>{new Date(tx.date).toLocaleDateString()}</span>
+                <span>{tx.category}</span>
+                <span className="amount">
+                  {tx.type === "income" ? "+" : "-"}${tx.amount}
+                </span>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(tx._id)}
+                >
+                  ✖
+                </button>
+              </div>
+            ))
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
