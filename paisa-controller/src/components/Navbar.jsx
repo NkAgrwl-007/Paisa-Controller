@@ -1,6 +1,6 @@
 // src/components/Navbar.jsx
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // ⬅️ add useNavigate
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
@@ -14,15 +14,15 @@ const Navbar = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // ⬅️ controls sidebar toggle
   const [editForm, setEditForm] = useState({
     name: user?.name || "",
     email: user?.email || "",
   });
 
   const location = useLocation();
-  const navigate = useNavigate(); // ⬅️ init navigate hook
+  const navigate = useNavigate();
 
-  // Dark Mode toggle effect
   useEffect(() => {
     document.body.classList.toggle("dark-mode", darkMode);
   }, [darkMode]);
@@ -31,7 +31,7 @@ const Navbar = () => {
     localStorage.removeItem("user");
     setUser(null);
     setIsPanelOpen(false);
-    navigate("/login"); // ⬅️ redirect to login page
+    navigate("/login");
   };
 
   const handleSaveProfile = () => {
@@ -39,54 +39,67 @@ const Navbar = () => {
     localStorage.setItem("user", JSON.stringify(editForm));
     setIsEditOpen(false);
   };
+
   return (
     <>
+      {/* Hamburger Button */}
+      <button
+        className={`hamburger ${isSidebarOpen ? "active" : ""}`}
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
       {/* Sidebar */}
-      <div className="sidebar">
-        {/* Brand */}
-        <div className="sidebar-brand">
-          <h2>Paisa Controller</h2>
-        </div>
-
-        {/* User Avatar (above links) */}
-        {user && (
-          <div
-            className="sidebar-user top"
-            onClick={() => setIsPanelOpen(!isPanelOpen)}
-          >
-            <div className="user-avatar">
-              {user?.name?.charAt(0).toUpperCase() || "U"}
-            </div>
+      {isSidebarOpen && (
+        <div className="sidebar">
+          <div className="sidebar-brand">
+            {user && (
+              <div
+                className="sidebar-user top"
+                onClick={() => setIsPanelOpen(!isPanelOpen)}
+              >
+                <div className="user-avatar">
+                  {user?.name?.charAt(0).toUpperCase() || "U"}
+                </div>
+              </div>
+            )}
+            <h2>Paisa Controller</h2>
           </div>
-        )}
 
-        {/* Links */}
-        <ul className="sidebar-links">
-          <li className={location.pathname === "/dashboard" ? "active" : ""}>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-          <li
-            className={location.pathname === "/transactions" ? "active" : ""}
-          >
-            <Link to="/transactions">Transactions</Link>
-          </li>
-          <li className={location.pathname === "/budgets" ? "active" : ""}>
-            <Link to="/budgets">Budgets</Link>
-          </li>
-          <li className={location.pathname === "/savings" ? "active" : ""}>
-            <Link to="/savings">Savings</Link>
-          </li>
-          <li className={location.pathname === "/reports" ? "active" : ""}>
-            <Link to="/reports">Reports</Link>
-          </li>
-        </ul>
-      </div>
+          <ul className="sidebar-links">
+            <li className={location.pathname === "/dashboard" ? "active" : ""}>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+            <li
+              className={location.pathname === "/transactions" ? "active" : ""}
+            >
+              <Link to="/transactions">Transactions</Link>
+            </li>
+            <li className={location.pathname === "/budgets" ? "active" : ""}>
+              <Link to="/budgets">Budgets</Link>
+            </li>
+            <li className={location.pathname === "/savings" ? "active" : ""}>
+              <Link to="/savings">Savings</Link>
+            </li>
+            <li className={location.pathname === "/reports" ? "active" : ""}>
+              <Link to="/reports">Reports</Link>
+            </li>
+            <li
+              className={location.pathname === "/ai-insights" ? "active" : ""}
+            >
+              <Link to="/ai-insights">AI Insights</Link>
+            </li>
+          </ul>
+        </div>
+      )}
 
       {/* Overlay Panel */}
       {isPanelOpen && user && (
         <div className="user-panel-overlay">
           <div className="user-panel slide-in">
-            {/* Close button */}
             <button
               className="close-btn"
               onClick={() => setIsPanelOpen(false)}
@@ -94,7 +107,6 @@ const Navbar = () => {
               ✖
             </button>
 
-            {/* Default view (profile info + buttons) */}
             {!isEditOpen && (
               <>
                 <div className="user-info">
@@ -123,7 +135,6 @@ const Navbar = () => {
               </>
             )}
 
-            {/* Edit Profile form (inside the panel, overlaying it) */}
             {isEditOpen && (
               <div className="edit-panel">
                 <h3>Edit Profile</h3>

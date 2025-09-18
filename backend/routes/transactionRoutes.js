@@ -37,10 +37,10 @@ router.get("/", authMiddleware, async (req, res) => {
 
 // ✅ Add a transaction for logged-in user
 router.post("/", authMiddleware, async (req, res) => {
-  const { amount, category, type, date } = req.body;
+  const { amount, category, type, date, description, paymentMethod, recurring, tags } = req.body;
 
   if (!amount || !category || !type || !date) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res.status(400).json({ message: "Required fields missing" });
   }
 
   try {
@@ -49,7 +49,11 @@ router.post("/", authMiddleware, async (req, res) => {
       category,
       type,
       date,
-      user: req.user, // attach logged-in user
+      description: description || "",
+      paymentMethod: paymentMethod || "other",
+      recurring: recurring || false,
+      tags: Array.isArray(tags) ? tags : [],
+      user: req.user,
     });
 
     await newTransaction.save();
@@ -59,6 +63,7 @@ router.post("/", authMiddleware, async (req, res) => {
     res.status(500).json({ message: "Error saving transaction" });
   }
 });
+
 
 // ✅ Delete a transaction (only if it belongs to the logged-in user)
 router.delete("/:id", authMiddleware, async (req, res) => {

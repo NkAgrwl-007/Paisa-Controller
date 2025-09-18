@@ -7,16 +7,16 @@
   --text-color: #e6e6e6;
   --muted-text: #9ba3af;
   --radius: 14px;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  --blur: blur(10px);
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  --blur: blur(15px);
   --transition: 0.3s ease;
-  --sidebar-width: 220px; /* ✅ sync with navbar.css */
+  --sidebar-width: 220px;
 }
 
 /* Page Layout */
 .page-container {
   padding: 6rem 2rem 2rem;
-  margin-left: var(--sidebar-width); /* ✅ pushes content right of sidebar */
+  margin-left: var(--sidebar-width);
   max-width: 1000px;
   color: var(--text-color);
   min-height: 100vh;
@@ -25,15 +25,17 @@
 }
 
 .page-title {
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 2.2rem;
+  font-weight: 700;
   color: var(--accent);
   margin-bottom: 0.5rem;
+  letter-spacing: 1px;
 }
 
 .page-subtitle {
   color: var(--muted-text);
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  font-size: 1rem;
 }
 
 /* Form */
@@ -45,45 +47,57 @@
   background: var(--card-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: var(--blur);
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.transaction-form:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 }
 
 .transaction-form input,
 .transaction-form select {
-  padding: 0.6rem 1rem;
+  padding: 0.7rem 1rem;
   border-radius: var(--radius);
   border: 1px solid var(--glass-border);
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-color);
   outline: none;
   flex: 1;
-  min-width: 150px;
+  min-width: 160px;
   transition: var(--transition);
 }
 
 .transaction-form input:focus,
 .transaction-form select:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
+  box-shadow: 0 0 10px var(--accent);
 }
 
-/* Primary Button */
+.transaction-form label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--muted-text);
+}
+
 .btn-primary {
   background: var(--accent);
-  color: #000;
-  padding: 0.6rem 1.5rem;
+  color: #0d1117;
+  padding: 0.7rem 1.8rem;
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   transition: var(--transition);
 }
 
 .btn-primary:hover {
   background: var(--accent-hover);
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.05);
 }
 
 /* Transaction List */
@@ -93,33 +107,58 @@
   gap: 1rem;
 }
 
+/* Transaction Cards */
 .transaction-card {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   background: var(--card-bg);
   border: 1px solid var(--glass-border);
   backdrop-filter: var(--blur);
-  padding: 1rem;
+  padding: 1rem 1.2rem;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   transition: var(--transition);
+  gap: 0.5rem;
 }
 
 .transaction-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px) scale(1.01);
   border-color: var(--accent);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
 }
 
 /* Income vs Expense Styling */
 .transaction-card.income .amount {
   color: #00ff88;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .transaction-card.expense .amount {
   color: #ff4444;
-  font-weight: 600;
+  font-weight: 700;
+}
+
+/* Tags Styling */
+.transaction-card .tags {
+  background: rgba(0, 230, 230, 0.2);
+  color: var(--accent);
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  margin-left: 0.3rem;
+  transition: 0.2s;
+}
+
+.transaction-card .tags:hover {
+  background: rgba(0, 230, 230, 0.4);
+}
+
+/* Recurring badge */
+.transaction-card .recurring {
+  font-size: 1rem;
+  margin-left: 0.5rem;
 }
 
 /* Delete Button */
@@ -127,14 +166,14 @@
   background: transparent;
   color: #ff4444;
   border: none;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .delete-btn:hover {
   color: #ff7777;
-  transform: scale(1.2);
+  transform: scale(1.3);
 }
 
 /* Empty State */
@@ -146,4 +185,20 @@
   color: var(--muted-text);
   font-style: italic;
   background: rgba(255, 255, 255, 0.03);
+  transition: var(--transition);
+}
+
+.empty-state:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .transaction-form {
+    flex-direction: column;
+  }
+  .transaction-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

@@ -1,15 +1,13 @@
+// backend/routes/userRoutes.js
 const express = require("express");
 const {
   createUser,
   loginUser,
   getUsers,
   updateUser,
+  getMe,
 } = require("../controllers/userController");
 const { protect } = require("../middleware/authMiddleware");
-
-// ✅ Debug log after imports
-console.log("getUsers:", getUsers);
-console.log("protect:", protect);
 
 const router = express.Router();
 
@@ -23,8 +21,13 @@ router.post("/signup", createUser);
 // @access  Public
 router.post("/login", loginUser);
 
+// @route   GET /api/users/me
+// @desc    Get current logged-in user profile
+// @access  Private
+router.get("/me", protect, getMe);
+
 // @route   GET /api/users
-// @desc    Get all users (without passwords)
+// @desc    Get all users (admin access later)
 // @access  Private
 router.get("/", protect, getUsers);
 

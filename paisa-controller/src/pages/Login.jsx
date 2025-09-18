@@ -1,3 +1,4 @@
+// src/components/Login.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -22,15 +23,12 @@ const Login = () => {
       const response = await axios.post(
         "http://localhost:5000/api/users/login",
         credentials,
-        { withCredentials: true } // ✅ allows cookies if backend uses them
+        { withCredentials: true }
       );
 
       if (response.status === 200 && response.data?.token) {
-        // ✅ Save token + user info in localStorage
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
-
-        // Redirect after successful login
         navigate("/dashboard", { replace: true });
       } else {
         setMessage("Login failed. Please try again.");
@@ -46,33 +44,46 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={credentials.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={credentials.password}
-          onChange={handleChange}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-      {message && <p className="error-message">{message}</p>}
-      <p>
-        Don’t have an account? <Link to="/signup">Sign Up</Link>
-      </p>
+    <div className="login-page">
+      {/* Animated Background */}
+      <div className="background-shapes">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      {/* Login Form */}
+      <div className="auth-container">
+        <h2>Login</h2>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={credentials.email}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={credentials.password}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        {message && <p className="error-message">{message}</p>}
+
+        <p>
+          Don’t have an account? <Link to="/signup">Sign Up</Link>
+        </p>
+      </div>
     </div>
   );
 };

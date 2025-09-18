@@ -13,7 +13,7 @@ import AIInsights from "./pages/AIInsight";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
-
+import AIInsight from "./pages/AIInsight";
 import "./styles/global.css";
 
 // ✅ Protected Route Component

@@ -1,3 +1,4 @@
+// backend/server.js
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -16,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS Configuration
+// ✅ CORS Configuration
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
@@ -26,30 +27,33 @@ app.use(
   })
 );
 
-// Routes
+// ✅ API Routes
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/transactions", require("./routes/transactionRoutes"));
 app.use("/api/budget", require("./routes/budgetRoutes"));
+app.use("/api/insights", require("./routes/insightRoutes"));
 
-// Health check
+// ✅ Health check
 app.get("/", (req, res) => {
   res.json({ message: "💰 Paisa Controller API is running..." });
 });
 
-// 404 Handler
+// ✅ 404 Handler
 app.use((req, res, next) => {
-  res.status(404).json({ message: "Route not found" });
+  res.status(404).json({ message: `Route not found: ${req.originalUrl}` });
 });
 
-// Global Error Handler
+// ✅ Global Error Handler
 app.use((err, req, res, next) => {
-  console.error("❌ Server Error:", err);
-  res.status(500).json({
-    message: "Internal Server Error",
-    error: process.env.NODE_ENV === "development" ? err.message : undefined,
+  console.error("❌ Server Error:", err.stack);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   });
 });
 
-// Start Server
+// ✅ Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`✅ Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+);

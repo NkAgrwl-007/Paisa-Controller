@@ -124,7 +124,7 @@ const updateUser = async (req, res) => {
   }
 };
 
-// @desc    Get all users (without passwords)
+// @desc    Get all users (admin only)
 // @route   GET /api/users
 // @access  Private/Admin
 const getUsers = async (req, res) => {
@@ -136,9 +136,29 @@ const getUsers = async (req, res) => {
   }
 };
 
+// @desc    Get logged-in user profile
+// @route   GET /api/users/me
+// @access  Private
+// @desc    Get current logged-in user
+// @route   GET /api/users/me
+// @access  Private
+const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
 module.exports = {
   createUser,
   loginUser,
   updateUser,
   getUsers,
+  getMe,
 };

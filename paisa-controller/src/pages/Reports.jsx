@@ -6,9 +6,8 @@ import "../styles/reports.css";
 
 const Reports = () => {
   const [transactions, setTransactions] = useState([]);
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
 
   const token = localStorage.getItem("token");
 
@@ -16,34 +15,19 @@ const Reports = () => {
     if (token) fetchTransactions();
   }, [token]);
 
-  useEffect(() => {
-    filterTransactions();
-  }, [filter, transactions]);
-
-  // ✅ Fetch user transactions
   const fetchTransactions = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/transactions", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTransactions(res.data || []);
-    } catch (error) {
-      console.error("Error fetching transactions:", error);
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Filter by type
-  const filterTransactions = () => {
-    if (filter === "all") {
-      setFilteredTransactions(transactions);
-    } else {
-      setFilteredTransactions(transactions.filter((tx) => tx.type === filter));
-    }
-  };
-
-  // ✅ Totals
   const incomeTotal = transactions
     .filter((tx) => tx.type === "income")
     .reduce((acc, tx) => acc + Number(tx.amount), 0);
@@ -54,14 +38,29 @@ const Reports = () => {
 
   const savings = incomeTotal - expenseTotal;
 
-  // ✅ Chart Data
+  // Top categories
+  const categoryTotals = transactions.reduce((acc, tx) => {
+    if (!acc[tx.category]) acc[tx.category] = 0;
+    acc[tx.category] += Number(tx.amount);
+    return acc;
+  }, {});
+
+  const topCategories = Object.entries(categoryTotals)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+
+  const filteredTransactions =
+    filter === "all"
+      ? transactions
+      : transactions.filter((tx) => tx.type === filter);
+
   const barData = {
-    labels: ["Income", "Expense"],
+    labels: ["Income", "Expense", "Savings"],
     datasets: [
       {
         label: "Amount ($)",
-        data: [incomeTotal, expenseTotal],
-        backgroundColor: ["#00C49F", "#FF4444"],
+        data: [incomeTotal, expenseTotal, savings],
+        backgroundColor: ["#00C49F", "#FF4444", savings >= 0 ? "#00ff88" : "#ff5555"],
         borderRadius: 12,
       },
     ],
@@ -79,7 +78,6 @@ const Reports = () => {
     ],
   };
 
-  // ✅ Format date
   const formatDate = (date) =>
     new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -87,19 +85,17 @@ const Reports = () => {
       day: "numeric",
     });
 
-  if (loading) return <p className="loading">🚀 Generating AI-powered reports...</p>;
+  if (loading)
+    return <p className="loading">🚀 Loading AI-powered financial insights...</p>;
 
   return (
-    <div className="reports futuristic">
-      {/* ✅ Navbar (shared with dashboard) */}
-     
+    <div className="reports dashboard">
+      <h1 className="reports-title">📊 Financial Dashboard</h1>
+      <p className="reports-subtitle">Your AI-assisted money flow analysis</p>
 
-      <h1 className="reports-title">📊 Financial Reports</h1>
-      <p className="reports-subtitle">AI-powered breakdown of your money flow</p>
-
-      {/* ✅ Filter */}
+      {/* Filter */}
       <div className="filter-options">
-        <label>Filter:</label>
+        <label>Filter Transactions:</label>
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
           <option value="all">All</option>
           <option value="income">Income</option>
@@ -107,40 +103,49 @@ const Reports = () => {
         </select>
       </div>
 
-      {/* ✅ Charts Section */}
+      {/* Charts */}
       <div className="charts-grid">
         <div className="glass-card chart">
-          <h2>Income vs Expense</h2>
+          <h2>Overview</h2>
           <Bar data={barData} />
         </div>
         <div className="glass-card chart">
           <h2>Distribution</h2>
           <Pie data={pieData} />
         </div>
-        <div className="glass-card insights">
-          <h2>🤖 AI Insights</h2>
-          {incomeTotal > 0 ? (
-            <>
-              <p>
-                💡 You spent {(expenseTotal / incomeTotal * 100).toFixed(1)}% of
-                your income.
-              </p>
-              {expenseTotal > incomeTotal * 0.5 && (
-                <p>⚠️ High spending detected! Consider reducing expenses.</p>
-              )}
-              {savings > 0 ? (
-                <p>🚀 Great! You’re saving ${savings.toFixed(2)} overall.</p>
-              ) : (
-                <p>❌ Warning: Expenses are exceeding income!</p>
-              )}
-            </>
-          ) : (
-            <p>No insights yet. Add transactions.</p>
-          )}
-        </div>
       </div>
 
-      {/* ✅ Transactions List */}
+      {/* Insights */}
+      <div className="glass-card insights">
+        <h2>🤖 AI Insights</h2>
+        <p>
+          💡 You spent {(expenseTotal / incomeTotal) * 100 || 0}% of your income.
+        </p>
+        {expenseTotal > incomeTotal * 0.5 && (
+          <p>⚠️ High spending detected! Consider reducing expenses.</p>
+        )}
+        {savings > 0 ? (
+          <p>🚀 You are saving ${savings.toFixed(2)} overall!</p>
+        ) : (
+          <p>❌ Warning: Expenses exceed income!</p>
+        )}
+
+        {/* Top Categories */}
+        {topCategories.length > 0 && (
+          <div className="top-categories">
+            <h3>📌 Top Spending Categories:</h3>
+            <ul>
+              {topCategories.map(([cat, amt]) => (
+                <li key={cat}>
+                  {cat}: ${amt.toFixed(2)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {/* Recent Transactions */}
       <div className="glass-card transaction-list">
         <h2>Recent Transactions</h2>
         {filteredTransactions.length === 0 ? (
@@ -153,6 +158,9 @@ const Reports = () => {
               <span className="amount">
                 {tx.type === "income" ? "+" : "-"}${tx.amount}
               </span>
+              {tx.description && <span className="desc">{tx.description}</span>}
+              {tx.paymentMethod && <span className="method">{tx.paymentMethod}</span>}
+              {tx.tags && <span className="tags">{tx.tags.join(", ")}</span>}
             </div>
           ))
         )}
